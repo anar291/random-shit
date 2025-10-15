@@ -1,0 +1,267 @@
+/* --- CSS Custom Properties (Variables) for easy theming --- */
+:root {
+    --primary-color: #667eea;
+    --primary-hover-color: #5a67d8;
+    --danger-color: #fc8181;
+    --danger-hover-color: #f56565;
+    --light-bg-color: #f7fafc;
+    --text-dark-color: #2d3748;
+    --text-light-color: #a0aec0;
+    --border-color: #e2e8f0;
+    --container-bg: white;
+    --box-shadow: 0 10px 30px rgba(0, 0, 0, 0.1);
+}
+
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+}
+
+body {
+    background: linear-gradient(135deg, var(--primary-color) 0%, #764ba2 100%);
+    min-height: 100vh;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    padding: 20px;
+    cursor: none; /* Hide the default cursor */
+}
+
+.container {
+    background: var(--container-bg);
+    border-radius: 12px;
+    padding: 2rem;
+    box-shadow: var(--box-shadow);
+    width: 100%;
+    max-width: 500px;
+    /* --- Added a subtle transition for a smoother feel --- */
+    transition: all 0.3s ease;
+}
+
+h1 {
+    color: var(--text-dark-color);
+    text-align: center;
+    margin-bottom: 1.5rem;
+    font-size: 2rem;
+}
+
+.todo-input {
+    display: flex;
+    gap: 10px;
+    margin-bottom: 1.5rem;
+}
+
+input[type="text"] {
+    flex: 1;
+    padding: 12px;
+    border: 2px solid var(--border-color);
+    border-radius: 6px;
+    font-size: 1rem;
+    transition: all 0.3s ease;
+}
+
+input[type="text"]:focus {
+    outline: none;
+    border-color: var(--primary-color);
+    /* --- Added a shadow on focus for a 'pop' effect --- */
+    box-shadow: 0 0 0 3px rgba(102, 126, 234, 0.2);
+}
+
+button {
+    background-color: var(--primary-color);
+    color: white;
+    border: none;
+    padding: 12px 20px;
+    border-radius: 6px;
+    cursor: pointer;
+    font-size: 1rem;
+    transition: all 0.3s ease;
+    /* --- Added a subtle shadow to the main button --- */
+    box-shadow: 0 4px 15px rgba(102, 126, 234, 0.3);
+}
+
+button:hover {
+    background-color: var(--primary-hover-color);
+    /* --- Add a transform effect for a tactile feel --- */
+    transform: translateY(-2px);
+    box-shadow: 0 6px 20px rgba(102, 126, 234, 0.4);
+}
+
+.filters {
+    display: flex;
+    gap: 10px;
+    margin-bottom: 1.5rem;
+    justify-content: center;
+}
+
+.filter-btn {
+    background-color: var(--border-color);
+    color: var(--text-light-color);
+    font-weight: 500;
+}
+
+.filter-btn.active {
+    background-color: var(--primary-color);
+    color: white;
+    box-shadow: 0 4px 15px rgba(102, 126, 234, 0.3);
+}
+
+#todoList {
+    list-style: none;
+    margin-bottom: 1.5rem;
+}
+
+.todo-item {
+    display: flex;
+    align-items: center;
+    padding: 12px;
+    background-color: var(--light-bg-color);
+    border-radius: 6px;
+    margin-bottom: 8px;
+    animation: slideIn 0.4s ease-in-out;
+    transition: all 0.3s ease;
+}
+
+/* --- New animation for item deletion --- */
+@keyframes slideOut {
+    to {
+        opacity: 0;
+        transform: translateX(50px);
+        height: 0;
+        padding: 0;
+        margin-bottom: 0;
+    }
+}
+
+.todo-item.removing {
+    animation: slideOut 0.4s ease-in-out forwards;
+}
+
+.todo-item:hover {
+    transform: scale(1.02);
+    box-shadow: 0 5px 15px rgba(0, 0, 0, 0.08);
+}
+
+.todo-item.completed {
+    background-color: #e9ecf3;
+    opacity: 0.8;
+}
+
+.todo-item.completed .todo-text {
+    text-decoration: line-through;
+    color: var(--text-light-color);
+}
+
+/* --- Styling for a custom checkbox --- */
+.todo-checkbox {
+    -webkit-appearance: none; /* Remove default appearance */
+    appearance: none;
+    background-color: #fff;
+    margin-right: 15px;
+    font: inherit;
+    color: currentColor;
+    width: 1.15em;
+    height: 1.15em;
+    border: 0.15em solid var(--border-color);
+    border-radius: 0.25em;
+    transform: translateY(-0.075em);
+    display: grid;
+    place-content: center;
+    cursor: pointer;
+    transition: all 0.2s ease;
+}
+
+.todo-checkbox::before {
+    content: "";
+    width: 0.65em;
+    height: 0.65em;
+    transform: scale(0);
+    transition: 120ms transform ease-in-out;
+    box-shadow: inset 1em 1em var(--primary-color);
+    /* --- Creating the checkmark using clip-path --- */
+    clip-path: polygon(14% 44%, 0 65%, 50% 100%, 100% 16%, 80% 0%, 43% 62%);
+}
+
+.todo-checkbox:checked {
+    border-color: var(--primary-color);
+}
+
+.todo-checkbox:checked::before {
+    transform: scale(1);
+}
+
+.todo-text {
+    flex: 1;
+    color: var(--text-dark-color);
+}
+
+.delete-btn {
+    background-color: transparent;
+    color: var(--text-light-color);
+    padding: 8px;
+    width: 35px; /* Set fixed width */
+    height: 35px; /* Set fixed height */
+    border-radius: 50%; /* Make it circular */
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    opacity: 0.5; /* Slightly visible */
+}
+
+.todo-item:hover .delete-btn {
+    background-color: var(--danger-color);
+    color: white;
+    opacity: 1; /* Fully visible on hover */
+}
+
+.delete-btn:hover {
+    background-color: var(--danger-hover-color);
+    transform: scale(1.1) rotate(15deg); /* Fun rotate effect on hover */
+}
+
+.todo-footer {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    color: #4a5568;
+    font-size: 0.875rem;
+    border-top: 1px solid var(--border-color); /* Separator line */
+    padding-top: 1.5rem;
+}
+
+#clearCompleted {
+    background-color: transparent;
+    color: var(--danger-color);
+    font-size: 0.875rem;
+    font-weight: 500;
+}
+
+#clearCompleted:hover {
+    background-color: transparent;
+    text-decoration: underline;
+}
+
+@keyframes slideIn {
+    from {
+        opacity: 0;
+        transform: translateY(-10px);
+    }
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+#custom-cursor {
+    position: fixed;
+    width: 20px;
+    height: 20px;
+    background-color: rgb(135, 7, 7);
+    border-radius: 50%;
+    pointer-events: none; /* Allows you to click through it */
+    transform: translate(-50%, -50%);
+    z-index: 9999;
+    transition: transform 0.2s ease-out, background-color 0.2s ease-out; /* For smooth animations */
+}
