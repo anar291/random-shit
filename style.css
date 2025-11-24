@@ -1,17 +1,349 @@
-body {
-    cursor: none; /* Hide the default cursor */
-    height: 100vh; /* Ensure body takes full height for mouse tracking */
-    margin: 0;
-    overflow: hidden; /* Prevent scrollbars if cursor goes slightly out of bounds */
+/* --- Variables & Reset --- */
+:root {
+    --primary-color: #6366f1; /* Indigo */
+    --primary-hover: #4f46e5;
+    --danger-color: #ef4444;
+    --bg-gradient: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+    --glass-bg: rgba(255, 255, 255, 0.92); /* Frosted glass look */
+    --glass-border: 1px solid rgba(255, 255, 255, 0.6);
+    --text-dark: #1e293b;
+    --text-light: #64748b;
+    --bmc-yellow: #FFDD00; /* Buy Me A Coffee Yellow */
 }
 
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+    font-family: 'Poppins', sans-serif;
+}
+
+body {
+    background: var(--bg-gradient);
+    min-height: 100vh;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    padding: 20px;
+    padding-bottom: 80px; /* Space for the fixed footer */
+    cursor: none; /* Hide default cursor */
+    overflow-x: hidden;
+}
+
+/* --- Custom Cursor --- */
 #custom-cursor {
-    position: fixed; /* Keep it relative to the viewport */
-    width: 20px; /* Adjust size as needed */
-    height: 20px; /* Adjust size as needed */
-    background-color: yellow; /* Yellow color */
-    border-radius: 50%; /* Make it a circle */
-    pointer-events: none; /* Allow clicks to pass through to elements beneath */
-    transform: translate(-50%, -50%); /* Center the circle on the mouse pointer */
-    z-index: 9999; /* Ensure it's on top of other content */
+    position: fixed;
+    width: 20px;
+    height: 20px;
+    background-color: var(--bmc-yellow); 
+    border: 2px solid #fff;
+    border-radius: 50%;
+    pointer-events: none;
+    transform: translate(-50%, -50%);
+    z-index: 9999;
+    box-shadow: 0 0 10px rgba(0,0,0,0.2);
+    transition: transform 0.1s ease-out;
+    mix-blend-mode: difference;
+}
+
+/* Hide custom cursor on mobile to prevent glitches */
+@media (hover: none) and (pointer: coarse) {
+    #custom-cursor { display: none; }
+    body { cursor: auto; }
+}
+
+/* --- Main Container (Glassmorphism) --- */
+.container {
+    background: var(--glass-bg);
+    backdrop-filter: blur(12px);
+    -webkit-backdrop-filter: blur(12px);
+    border: var(--glass-border);
+    border-radius: 20px;
+    padding: 2.5rem;
+    box-shadow: 0 20px 40px rgba(0, 0, 0, 0.2);
+    width: 100%;
+    max-width: 480px;
+    transition: all 0.3s ease;
+    margin-bottom: 20px; /* Space from footer on small screens */
+}
+
+header {
+    text-align: center;
+    margin-bottom: 2rem;
+}
+
+h1 {
+    color: var(--text-dark);
+    font-size: 1.8rem;
+    font-weight: 700;
+}
+
+.subtitle {
+    color: var(--text-light);
+    font-size: 0.9rem;
+    margin-top: 5px;
+}
+
+/* --- Input Area --- */
+.todo-input {
+    display: flex;
+    gap: 12px;
+    margin-bottom: 1.5rem;
+    position: relative;
+}
+
+input[type="text"] {
+    flex: 1;
+    padding: 15px;
+    border: 2px solid #e2e8f0;
+    border-radius: 12px;
+    font-size: 1rem;
+    background: rgba(255, 255, 255, 0.8);
+    transition: all 0.3s ease;
+    color: var(--text-dark);
+}
+
+input[type="text"]:focus {
+    outline: none;
+    border-color: var(--primary-color);
+    box-shadow: 0 0 0 4px rgba(99, 102, 241, 0.1);
+}
+
+.shake {
+    animation: shake 0.4s cubic-bezier(.36,.07,.19,.97) both;
+}
+
+@keyframes shake {
+    10%, 90% { transform: translate3d(-1px, 0, 0); }
+    20%, 80% { transform: translate3d(2px, 0, 0); }
+    30%, 50%, 70% { transform: translate3d(-4px, 0, 0); }
+    40%, 60% { transform: translate3d(4px, 0, 0); }
+}
+
+button#addTask {
+    background-color: var(--primary-color);
+    color: white;
+    border: none;
+    width: 54px;
+    border-radius: 12px;
+    cursor: pointer;
+    font-size: 1.2rem;
+    transition: all 0.2s ease;
+}
+
+button#addTask:hover {
+    background-color: var(--primary-hover);
+    transform: scale(1.05);
+}
+
+/* --- Filters --- */
+.filters {
+    display: flex;
+    justify-content: center;
+    gap: 8px;
+    margin-bottom: 1.5rem;
+    background: #f1f5f9;
+    padding: 5px;
+    border-radius: 10px;
+}
+
+.filter-btn {
+    background: transparent;
+    border: none;
+    color: var(--text-light);
+    padding: 8px 16px;
+    border-radius: 8px;
+    cursor: pointer;
+    font-weight: 500;
+    font-size: 0.9rem;
+    transition: all 0.2s;
+}
+
+.filter-btn.active {
+    background: white;
+    color: var(--primary-color);
+    box-shadow: 0 2px 5px rgba(0,0,0,0.05);
+}
+
+/* --- List Items --- */
+#todoList {
+    list-style: none;
+    margin-bottom: 1.5rem;
+    max-height: 300px;
+    overflow-y: auto;
+    padding-right: 5px;
+}
+
+#todoList::-webkit-scrollbar {
+    width: 6px;
+}
+#todoList::-webkit-scrollbar-thumb {
+    background-color: #cbd5e1;
+    border-radius: 4px;
+}
+
+.todo-item {
+    display: flex;
+    align-items: center;
+    padding: 12px 16px;
+    background: white;
+    border: 1px solid #f1f5f9;
+    border-radius: 10px;
+    margin-bottom: 10px;
+    animation: slideIn 0.3s ease forwards;
+    transition: all 0.2s;
+}
+
+.todo-item:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 4px 12px rgba(0,0,0,0.05);
+    border-color: var(--primary-color);
+}
+
+.todo-item.completed {
+    background: #f8fafc;
+    opacity: 0.7;
+}
+
+.todo-item.completed .todo-text {
+    text-decoration: line-through;
+    color: var(--text-light);
+}
+
+.todo-checkbox {
+    width: 20px;
+    height: 20px;
+    margin-right: 15px;
+    accent-color: var(--primary-color);
+    cursor: pointer;
+}
+
+.todo-text {
+    flex: 1;
+    color: var(--text-dark);
+    font-size: 0.95rem;
+    word-break: break-all;
+}
+
+.delete-btn {
+    background: none;
+    border: none;
+    color: #cbd5e1;
+    cursor: pointer;
+    padding: 5px;
+    transition: color 0.2s;
+}
+
+.delete-btn:hover {
+    color: var(--danger-color);
+}
+
+.todo-item.removing {
+    animation: slideOut 0.4s ease forwards;
+}
+
+@keyframes slideIn {
+    from { opacity: 0; transform: translateY(10px); }
+    to { opacity: 1; transform: translateY(0); }
+}
+
+@keyframes slideOut {
+    to { opacity: 0; transform: translateX(50px); margin-bottom: 0; padding: 0; height: 0; }
+}
+
+/* --- Internal Footer (Task Count) --- */
+.todo-footer {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    color: var(--text-light);
+    font-size: 0.85rem;
+    padding-top: 1rem;
+    border-top: 1px solid #e2e8f0;
+}
+
+#clearCompleted {
+    background: none;
+    border: none;
+    color: var(--text-light);
+    cursor: pointer;
+    font-size: 0.85rem;
+}
+
+#clearCompleted:hover {
+    color: var(--danger-color);
+    text-decoration: underline;
+}
+
+/* --- Fixed App Footer (Bottom of Screen) --- */
+.app-footer {
+    position: fixed;
+    bottom: 0;
+    left: 0;
+    width: 100%;
+    padding: 15px 0;
+    background: rgba(255, 255, 255, 0.1); /* Subtle glass */
+    backdrop-filter: blur(5px);
+    -webkit-backdrop-filter: blur(5px);
+    border-top: 1px solid rgba(255, 255, 255, 0.2);
+    z-index: 100;
+}
+
+.footer-content {
+    max-width: 600px;
+    margin: 0 auto;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    gap: 20px;
+    color: rgba(255, 255, 255, 0.9);
+    font-size: 0.9rem;
+}
+
+.footer-content p {
+    font-weight: 500;
+    letter-spacing: 0.5px;
+}
+
+.social-links {
+    display: flex;
+    gap: 15px;
+}
+
+.social-links a {
+    color: white;
+    font-size: 1.2rem;
+    transition: transform 0.2s, color 0.2s;
+}
+
+.social-links a:hover {
+    color: var(--bmc-yellow);
+    transform: translateY(-3px);
+}
+
+.footer-bmc-btn {
+    background-color: var(--bmc-yellow);
+    color: #000;
+    text-decoration: none;
+    padding: 6px 14px;
+    border-radius: 20px;
+    font-size: 0.8rem;
+    font-weight: 700;
+    display: flex;
+    align-items: center;
+    gap: 6px;
+    transition: all 0.2s ease;
+    box-shadow: 0 4px 10px rgba(0,0,0,0.2);
+}
+
+.footer-bmc-btn:hover {
+    transform: scale(1.05);
+    background-color: #ffe600;
+}
+
+@media (max-width: 480px) {
+    .footer-content {
+        flex-direction: column;
+        gap: 10px;
+    }
 }
