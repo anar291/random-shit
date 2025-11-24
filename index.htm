@@ -3,43 +3,66 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Modern Todo List</title>
+    <title>Arnab's Tasks</title>
     
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600;700&display=swap" rel="stylesheet">
     
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css">
     
-    <link rel="stylesheet" href="list.css">
+    <link rel="stylesheet" href="style.css">
 </head>
 <body>
     <div id="custom-cursor"></div>
 
     <div class="container">
-        <h1><i class="fa-solid fa-list-check"></i> My Todos</h1>
+        <header>
+            <h1><i class="fa-solid fa-list-check"></i> My Todos</h1>
+            <p class="subtitle">Focus on what matters</p>
+        </header>
         
         <div class="todo-input">
             <input type="text" id="taskInput" placeholder="e.g., Date With Girlfriend" aria-label="New task input">
             <button id="addTask" aria-label="Add new task">
-                <i class="fa-solid fa-plus"></i> Add
+                <i class="fa-solid fa-plus"></i>
             </button>
         </div>
         
         <div class="filters">
             <button class="filter-btn active" data-filter="all">All</button>
-            <button class="filter-btn" data-filter="active">Active</button>
-            <button class="filter-btn" data-filter="completed">Completed</button>
+            <button class="filter-btn" data-filter="active">Pending</button>
+            <button class="filter-btn" data-filter="completed">Done</button>
         </div>
         
-        <ul id="todoList"></ul>
+        <ul id="todoList">
+            </ul>
         
         <div class="todo-footer">
             <span id="taskCount">0 tasks left</span>
             <button id="clearCompleted">Clear Completed</button>
         </div>
     </div>
+
+    <footer class="app-footer">
+        <div class="footer-content">
+            <p>&copy; 2025 Arnab Pandey</p>
+            
+            <div class="social-links">
+                <a href="https://github.com/anar291" target="_blank" aria-label="GitHub">
+                    <i class="fa-brands fa-github"></i>
+                </a>
+                <a href="https://www.linkedin.com/in/arnab-pandey-60a085370/" target="_blank" aria-label="LinkedIn">
+                    <i class="fa-brands fa-linkedin"></i>
+                </a>
+            </div>
     
-    <script src="list.js"></script>
+            <a href="https://buymeacoffee.com/anar291" target="_blank" class="footer-bmc-btn">
+                <i class="fa-solid fa-mug-hot"></i> <span>Support</span>
+            </a>
+        </div>
+    </footer>
+    
+    <script src="script.js"></script>
 </body>
 </html>
